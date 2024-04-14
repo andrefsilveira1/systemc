@@ -24,3 +24,32 @@ SC_MODULE(Register) {
         data_out.write(reg_data);
     }
 };
+
+
+SC_MODULE(RegisterInterface) {
+    std::vector<Register*> registers;
+
+    SC_CTOR(RegisterInterface) {
+        // Quantos registradores tem que ser ?
+        for (int i = 0; i < 8; ++i) {
+            Register* reg = new Register("register_" + std::to_string(i));
+            registers.push_back(reg);
+        }
+    }
+
+    sc_uint<32> readRegister(int address) {
+        if (address >= 0 && address < 8) {
+            return registers[address]->data_out.read();
+        }
+        return 0;
+    }
+
+    void writeRegister(int address, sc_uint<32> data) {
+        if (address >= 0 && address < 8) {
+            registers[address]->data_in.write(data);
+            registers[address]->enable.write(true);
+            wait();
+            registers[address]->enable.write(false);
+        }
+    }
+};
