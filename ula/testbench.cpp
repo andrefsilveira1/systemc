@@ -42,8 +42,46 @@ int sc_main(int argc, char* argv[]) {
     std::cout << "ALU Result: " << result << std::endl;
     std::cout << "Zero Flag: " << zero << std::endl;
 
-    // Close VCD trace file
+    operand1 = 15;
+    operand2 = 10;
+    alu_control = 2;
+
+
+    sc_start(1, SC_NS);  // init
+
+    std::cout << "@" << sc_time_stamp() << " Starting...\n";
+    std::cout << "Operand1: " << operand1 << std::endl;
+    std::cout << "Operand2: " << operand2 << std::endl;
+    std::cout << "Signal Control: " << alu_control << std::endl;
+
+    sc_start(1, SC_NS);
+    std::cout << "@" << sc_time_stamp() << " Operation terminated \n";
+
+    std::cout << "ALU Result: " << result << std::endl;
+    std::cout << "Zero Flag: " << zero << std::endl;
+  
+   	operand1 = 15;
+    operand2 = 10;
+    alu_control = 3;
+
+
+    sc_start(1, SC_NS);  // init
+
+    std::cout << "@" << sc_time_stamp() << " Starting...\n";
+    std::cout << "Operand1: " << operand1 << std::endl;
+    std::cout << "Operand2: " << operand2 << std::endl;
+    std::cout << "Signal Control: " << alu_control << std::endl;
+
+    sc_start(1, SC_NS);
+    std::cout << "@" << sc_time_stamp() << " Operation terminated \n";
+
+    std::cout << "ALU Result: " << result << std::endl;
+    std::cout << "Zero Flag: " << zero << std::endl;
+
+
     sc_close_vcd_trace_file(wf);
+
+
 
     return 0;
 }
