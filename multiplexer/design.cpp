@@ -4,7 +4,6 @@ SC_MODULE(MUX) {
     sc_in<sc_uint<32>> operand1;
     sc_in<sc_uint<32>> operand2;
     sc_in<sc_uint<32>> operand3;
-    sc_in<sc_uint<2>> mux_control; // Changed to sc_uint<2> for 2-bit control
     sc_out<sc_uint<32>> result;
     sc_out<bool> zero;
 
@@ -32,6 +31,6 @@ SC_MODULE(MUX) {
 
     SC_CTOR(MUX) {
         SC_METHOD(mux_process);
-        sensitive << operand1 << operand2 << operand3 << mux_control;
+        sensitive << operand1 << operand2 << operand3;
     }
 };
