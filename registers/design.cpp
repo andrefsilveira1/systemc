@@ -24,3 +24,29 @@ public:
         data_out.write(reg_data);
     }
 };
+
+
+SC_MODULE(RegisterDatabase) {
+public:
+  sc_in<sc_uint<32>> reg_id;
+  sc_in<sc_uint<32>> data_in;
+  sc_out<sc_uint<32>> data_out;
+
+  sc_uint<32> registers[10];
+
+  SC_CTOR(RegisterDatabase) {
+    SC_METHOD(registerDataProcess);
+    sensitive << reg_id.pos();
+  }
+
+  void registerDataProcess() {
+    sc_uint<32> id = reg_id.read();
+    sc_uint<32> data = data_in.read();
+    registers[id] = data;
+    std::cout << "Updated: " << id << " : " << data << "\n";
+
+  }
+
+
+};
+
