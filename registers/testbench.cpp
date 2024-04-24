@@ -1,26 +1,45 @@
 #include <systemc.h>
+#include "design.cpp"
 
 int sc_main(int argc, char* argv[]) {
-    Register regFile("register_file");
+    Register reg("register");
+    RegisterDatabase regDb("registerDatabase");
 
-    regFile.reset = 1;
+    sc_clock clock("clock", 10, SC_NS);
+    sc_signal<bool> reset, enable;
+    sc_signal<sc_uint<32>> data_in, reg_id, reg_data, regDb_data_out;
 
-    sc_start(1, SC_NS);
+    reg.clock(clock);
+    reg.reset(reset);
+    reg.enable(enable);
+    reg.data_in(data_in);
+    reg.data_out(reg_data);
 
-    regFile.reset = 0;
+    regDb.reg_id(reg_id);
+    regDb.data_in(reg_data);
+    regDb.data_out(regDb_data_out);
 
-    regFile.writeRegister(5, 0xABCD); 
-    regFile.writeRegister(10, 0x1234);
+    sc_start(100, SC_NS);
+  
+    for (int i = 0; i < 5; ++i) {
+          sc_uint<32> id = rand() % 10;
+          sc_uint<32> data = rand() % 100; 
 
-    sc_start(10, SC_NS);
+          reg_id.write(id);
+          data_in.write(data);
+          enable.write(true);
 
-    sc_uint<32> data_5 = regFile.readRegister(5);
-    sc_uint<32> data_10 = regFile.readRegister(10);
+          // Wait()
+          sc_start(10, SC_NS);
 
-    std::cout << "Data read from register 5: " << data_5 << std::endl;
-    std::cout << "Data read from register 10: " << data_10 << std::endl;
+          enable.write(false);
 
-    sc_stop();
+          std::cout << "Register values after update " << i + 1 << ":\n";
+          for (int j = 0; j < 10; ++j) {
+              std::cout << "Register " << j << ": " << regDb.registers[j] << "\n";
+          }
+          std::cout << std::endl;
+      }
 
     return 0;
 }

@@ -36,7 +36,7 @@ public:
 
   SC_CTOR(RegisterDatabase) {
     SC_METHOD(registerDataProcess);
-    sensitive << reg_id.pos();
+    sensitive << reg_id;
   }
 
   void registerDataProcess() {
